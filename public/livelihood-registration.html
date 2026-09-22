@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>Register Livelihood - Barangay Admin</title>
+        <link href="css/styles.css" rel="stylesheet" />
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed app-shell registration-page livelihood-registration">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand ps-3" href="index.html">Barangay Admin</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" type="button"><i class="fas fa-bars"></i></button>
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4"><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a><ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"><li><a class="dropdown-item" href="settings.html"><i class="fas fa-gear fa-fw me-2"></i>Settings</a></li><li><a class="dropdown-item" href="login.html" data-auth-logout>Logout</a></li></ul></li></ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav"><nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion"><div class="sb-sidenav-menu"><div class="nav">
+                <div class="sb-sidenav-menu-heading">Main</div>
+                <a class="nav-link" href="index.html"><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Dashboard</a>
+                <div class="sb-sidenav-menu-heading">Registrations</div>
+                <a class="nav-link" href="beneficiary-registration.html"><div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Beneficiary</a>
+                <a class="nav-link active" href="livelihood-registration.html"><div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>Livelihood</a>
+                <a class="nav-link" href="tables.html"><div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>Records</a>
+            </div></div><div class="sb-sidenav-footer"><div class="small">Logged in as:</div>Barangay Admin</div></nav></div>
+            <div id="layoutSidenav_content"><main><div class="container-fluid px-4">
+                <div class="registration-heading livelihood-heading">
+                    <div>
+                        <p class="eyebrow">Livelihood programs</p>
+                        <h1 class="mt-1">Register a livelihood participant</h1>
+                        <p class="page-subtitle">Document the proposed business or project so the team can match support, training, and follow-up activities.</p>
+                    </div>
+                    <div class="registration-code"><i class="fas fa-briefcase"></i><span>LIV-###</span><small>Reference prefix</small></div>
+                </div>
+                <ol class="breadcrumb mb-4"><li class="breadcrumb-item"><a href="index.html">Dashboard</a></li><li class="breadcrumb-item"><a href="tables.html#livelihood">Livelihood programs</a></li><li class="breadcrumb-item active">New participant</li></ol>
+                <div class="registration-steps" aria-label="Livelihood registration steps">
+                    <div class="registration-step active"><span>1</span><div><strong>Participant profile</strong><small>Owner and contact details</small></div></div>
+                    <div class="registration-step"><span>2</span><div><strong>Project plan</strong><small>Business, location, and capital</small></div></div>
+                    <div class="registration-step"><span>3</span><div><strong>Support matching</strong><small>Choose the next intervention</small></div></div>
+                </div>
+                <div id="livelihoodSuccess" class="alert alert-success d-none" role="alert"></div>
+                <div class="registration-layout livelihood-layout"><div class="card registration-form-card mb-4"><div class="card-header"><i class="fas fa-briefcase me-1"></i> Livelihood project profile</div><div class="card-body">
+                    <form id="livelihoodForm" data-registration="livelihood" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6"><label class="form-label" for="livelihoodOwner">Applicant / owner name</label><input class="form-control" id="livelihoodOwner" name="Applicant / owner name" required /></div>
+                            <div class="col-md-3"><label class="form-label" for="livelihoodContact">Contact number</label><input class="form-control" id="livelihoodContact" name="Contact number" type="tel" required /></div>
+                            <div class="col-md-3"><label class="form-label" for="livelihoodType">Business type</label><select class="form-select" id="livelihoodType" name="Business type" required><option value="">Choose...</option><option>Retail</option><option>Food and beverage</option><option>Farming</option><option>Services</option><option>Handicrafts</option><option>Other</option></select></div>
+                            <div class="col-md-6"><label class="form-label" for="livelihoodName">Business / project name</label><input class="form-control" id="livelihoodName" name="Business / project name" required /></div>
+                            <div class="col-md-6"><label class="form-label" for="livelihoodLocation">Business location</label><input class="form-control" id="livelihoodLocation" name="Business location" required /></div>
+                            <div class="col-md-4"><label class="form-label" for="livelihoodCapital">Estimated capital</label><input class="form-control" id="livelihoodCapital" name="Estimated capital" type="number" min="0" step="0.01" required /></div>
+                            <div class="col-md-4"><label class="form-label" for="livelihoodEmployees">Expected workers</label><input class="form-control" id="livelihoodEmployees" name="Expected workers" type="number" min="1" required /></div>
+                            <div class="col-md-4"><label class="form-label" for="livelihoodSupport">Support requested</label><select class="form-select" id="livelihoodSupport" name="Support requested" required><option value="">Choose...</option><option>Starter capital</option><option>Tools or equipment</option><option>Skills training</option><option>Market linkage</option><option>Business mentoring</option></select></div>
+                            <div class="col-12"><label class="form-label" for="livelihoodDescription">Project description</label><textarea class="form-control" id="livelihoodDescription" name="Project description" rows="3" required></textarea></div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4"><button class="btn btn-outline-secondary" type="reset">Clear</button><button class="btn btn-success" type="submit"><i class="fas fa-paper-plane me-1"></i> Submit application</button></div>
+                    </form>
+                </div></div>
+                <aside class="registration-guide">
+                    <div class="guide-icon"><i class="fas fa-route"></i></div>
+                    <p class="eyebrow">After registration</p>
+                    <h2>Move the project forward</h2>
+                    <p>A submitted participant is ready for program matching. Add a training activity and track attendance from the records center.</p>
+                    <ul class="guide-list"><li><i class="fas fa-check"></i> Confirm the project location</li><li><i class="fas fa-check"></i> Estimate capital and workers</li><li><i class="fas fa-check"></i> Select the most useful support</li></ul>
+                    <a class="guide-link" href="tables.html#livelihood">Open livelihood records <i class="fas fa-arrow-right"></i></a>
+                </aside></div>
+            </div></main><footer class="py-4 bg-light mt-auto"><div class="container-fluid px-4"><div class="text-muted small">Copyright &copy; 2026 Barangay Admin</div></div></footer></div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script><script src="js/scripts.js"></script><script src="js/auth.js"></script>
+    </body>
+</html>
