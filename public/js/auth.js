@@ -5,6 +5,38 @@
         name: 'Barangay Administrator'
     };
     const sessionKey = 'barangayAdminSession';
+    const accountsKey = 'barangayAdminAccounts';
+
+    const normalizeEmail = (value) => (value || '').trim().toLowerCase();
+
+    const getAccounts = () => {
+        try {
+            const savedAccounts = JSON.parse(localStorage.getItem(accountsKey) || '[]');
+            const accounts = Array.isArray(savedAccounts) ? savedAccounts : [];
+            if (!accounts.length) {
+                const defaultAccounts = [{ ...demoAdmin }];
+                localStorage.setItem(accountsKey, JSON.stringify(defaultAccounts));
+                return defaultAccounts;
+            }
+
+            const hasDefaultAdmin = accounts.some((account) => normalizeEmail(account.email) === normalizeEmail(demoAdmin.email));
+            if (!hasDefaultAdmin) {
+                const updatedAccounts = [{ ...demoAdmin }, ...accounts];
+                localStorage.setItem(accountsKey, JSON.stringify(updatedAccounts));
+                return updatedAccounts;
+            }
+
+            return accounts;
+        } catch (error) {
+            const defaultAccounts = [{ ...demoAdmin }];
+            localStorage.setItem(accountsKey, JSON.stringify(defaultAccounts));
+            return defaultAccounts;
+        }
+    };
+
+    const saveAccounts = (accounts) => {
+        localStorage.setItem(accountsKey, JSON.stringify(accounts));
+    };
 
     const getSession = () => {
         const savedSession = sessionStorage.getItem(sessionKey) || localStorage.getItem(sessionKey);
@@ -21,11 +53,11 @@
         }
     };
 
-    const setSession = (remember) => {
-        const settings = readSettings();
+    const setSession = (remember, account = null) => {
+        const activeAccount = account || getAccounts().find((item) => normalizeEmail(item.email) === normalizeEmail(readSettings().email)) || { ...demoAdmin };
         const session = JSON.stringify({
-            email: settings.email,
-            name: settings.name,
+            email: normalizeEmail(activeAccount.email),
+            name: activeAccount.name || 'Barangay Administrator',
             signedInAt: new Date().toISOString()
         });
         const storage = remember ? localStorage : sessionStorage;
@@ -54,6 +86,13 @@
         'Educational assistance': 'Orientation',
         'Senior citizen support': 'Community assembly',
         'Emergency relief': 'Emergency validation'
+    };
+
+    const showAlert = (element, message, type = 'danger') => {
+        if (!element) return;
+        element.textContent = message;
+        element.className = `alert alert-${type} mt-3 mb-0`;
+        element.classList.remove('d-none');
     };
 
     const readSettings = () => {
@@ -180,6 +219,10 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const loginForm = document.querySelector('#loginForm');
+        const signupForm = document.querySelector('#signupForm');
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        const publicPages = ['login.html', 'register.html', 'password.html', 'privacy-policy.html', 'terms-and-conditions.html'];
+        const isProtectedPage = !publicPages.includes(currentPage);
         const isLoginPage = Boolean(loginForm);
 
         if (isLoginPage) {
@@ -200,15 +243,14 @@
                 emailInput.classList.remove('is-invalid');
                 passwordInput.classList.remove('is-invalid');
 
-                const email = emailInput.value.trim().toLowerCase();
+                const email = normalizeEmail(emailInput.value);
                 const password = passwordInput.value;
-                const settings = readSettings();
-                const validLogin = email === settings.email && password === (localStorage.getItem('barangayAdminPassword') || demoAdmin.password);
+                const accounts = getAccounts();
+                const account = accounts.find((item) => normalizeEmail(item.email) === email && item.password === password);
 
-                if (!validLogin) {
-                    loginMessage.textContent = 'The email or password is incorrect.';
-                    loginMessage.classList.remove('d-none');
-                    emailInput.classList.toggle('is-invalid', email !== settings.email);
+                if (!account) {
+                    showAlert(loginMessage, 'The email or password is incorrect.', 'danger');
+                    emailInput.classList.add('is-invalid');
                     passwordInput.classList.add('is-invalid');
                     passwordInput.focus();
                     return;
@@ -216,10 +258,79 @@
 
                 submitButton.disabled = true;
                 submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Signing in...';
-                setSession(rememberInput.checked);
+                setSession(rememberInput.checked, account);
+
+                const settings = readSettings();
+                const nextSettings = { ...settings, name: account.name, email: account.email };
+                localStorage.setItem(settingsKey, JSON.stringify(nextSettings));
                 window.location.href = 'index.html';
             });
-        } else if (!getSession()) {
+        }
+
+        if (signupForm) {
+            const signupMessage = document.querySelector('#signupMessage');
+            const firstNameInput = document.querySelector('#inputFirstName');
+            const lastNameInput = document.querySelector('#inputLastName');
+            const emailInput = document.querySelector('#inputEmail');
+            const passwordInput = document.querySelector('#inputPassword');
+            const confirmPasswordInput = document.querySelector('#inputPasswordConfirm');
+
+            signupForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const firstName = (firstNameInput.value || '').trim();
+                const lastName = (lastNameInput.value || '').trim();
+                const email = normalizeEmail(emailInput.value);
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                signupMessage?.classList.add('d-none');
+                [firstNameInput, lastNameInput, emailInput, passwordInput, confirmPasswordInput].forEach((field) => field.classList.remove('is-invalid'));
+
+                if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                    showAlert(signupMessage, 'Please complete all the required fields.', 'danger');
+                    [firstNameInput, lastNameInput, emailInput, passwordInput, confirmPasswordInput].forEach((field) => {
+                        if (!field.value.trim()) field.classList.add('is-invalid');
+                    });
+                    return;
+                }
+
+                if (password.length < 8) {
+                    showAlert(signupMessage, 'Password must be at least 8 characters long.', 'warning');
+                    passwordInput.classList.add('is-invalid');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    showAlert(signupMessage, 'Passwords do not match.', 'warning');
+                    passwordInput.classList.add('is-invalid');
+                    confirmPasswordInput.classList.add('is-invalid');
+                    return;
+                }
+
+                const accounts = getAccounts();
+                const emailExists = accounts.some((account) => normalizeEmail(account.email) === email);
+                if (emailExists) {
+                    showAlert(signupMessage, 'An account with this email already exists.', 'warning');
+                    emailInput.classList.add('is-invalid');
+                    return;
+                }
+
+                const newAccount = {
+                    name: `${firstName} ${lastName}`.trim(),
+                    email,
+                    password
+                };
+                accounts.push(newAccount);
+                saveAccounts(accounts);
+
+                showAlert(signupMessage, 'Account created successfully. Redirecting to login...', 'success');
+                signupForm.reset();
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1200);
+            });
+        } else if (isProtectedPage && !getSession()) {
             window.location.replace('login.html');
             return;
         }
