@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Beneficiary Management</title>
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed app-shell">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand ps-3" href="index.html">Barangay Program Management</a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" type="button"><i class="fas fa-bars"></i></button>
+        <div class="topbar-context">Beneficiary records workspace <span class="topbar-dot"></span> Live monitoring</div>
+        <ul class="navbar-nav ms-auto me-3">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="fas fa-user-circle fa-fw"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="settings.html"><i class="fas fa-gear fa-fw me-2"></i>Settings</a></li>
+                    <li><a class="dropdown-item" href="login.html" data-auth-logout>Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">Management</div>
+                        <a class="nav-link" href="index.html"><div class="sb-nav-link-icon"><i class="fas fa-grid-2"></i></div>Overview</a>
+                        <div class="sb-sidenav-menu-heading">Programs</div>
+                        <a class="nav-link" href="student-beneficiary-interface.html"><div class="sb-nav-link-icon"><i class="fas fa-graduation-cap"></i></div>Educational assistance</a>
+                        <a class="nav-link active" href="other-beneficiary-interface.html"><div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>Beneficiary</a>
+                        <a class="nav-link" href="livelihood-interface.html"><div class="sb-nav-link-icon"><i class="fas fa-briefcase"></i></div>Livelihood</a>
+                        <div class="sb-sidenav-menu-heading">Program actions</div>
+                        <a class="nav-link" href="beneficiary-registration.html"><div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>Beneficiary registration</a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer"><div class="small">Logged in as:</div>Barangay Administrator</div>
+            </nav>
+        </div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4">
+                    <div class="program-interface-shell">
+                        <div class="program-hero">
+                            <p class="eyebrow">Beneficiary</p>
+                            <h1>Beneficiary management</h1>
+                            <p class="page-subtitle">This area is only for non-Educational assistance cases such as food, medical, emergency, and household support. Attendance and events stay separate from student and livelihood lists.</p>
+                        </div>
+                        <div class="program-interface-actions d-flex flex-wrap gap-2 mb-4" aria-label="Beneficiary assistance actions">
+                            <a class="btn btn-primary" href="beneficiary-registration.html"><i class="fas fa-user-plus me-2"></i>Register beneficiary</a>
+                            <a class="btn btn-outline-primary" href="tables.html#applicant-flow"><i class="fas fa-list-check me-2"></i>Qualification overview</a>
+                            <a class="btn btn-outline-primary" href="tables.html#assistance"><i class="fas fa-clipboard-check me-2"></i>Applications, qualification &amp; release</a>
+                            <a class="btn btn-outline-primary" href="tables.html#attendance-logs"><i class="fas fa-user-check me-2"></i>Program attendance records</a>
+                            <a class="btn btn-outline-secondary" href="settings.html#qualification-rules"><i class="fas fa-list-check me-2"></i>Assistance requirements</a>
+                            <a class="btn btn-outline-secondary" href="tables.html#assistance-history"><i class="fas fa-clock-rotate-left me-2"></i>Assistance history</a>
+                            <a class="btn btn-outline-secondary" href="tables.html#reports"><i class="fas fa-chart-column me-2"></i>Reports</a>
+                        </div>
+
+                        <div class="program-summary-grid">
+                            <div class="program-summary-item">
+                                <span>Registered</span>
+                                <strong>0</strong>
+                            </div>
+                            <div class="program-summary-item">
+                                <span>Pending</span>
+                                <strong>0</strong>
+                            </div>
+                            <div class="program-summary-item">
+                                <span>Assistance attended</span>
+                                <strong>0</strong>
+                            </div>
+                            <div class="program-summary-item">
+                                <span>Released</span>
+                                <strong>0</strong>
+                            </div>
+                        </div>
+
+                        <div class="program-content-grid">
+                            <section class="program-list-table">
+                                <div class="program-table-header">
+                                    <h3>Beneficiary records</h3>
+                                    <span class="badge">Food & medical</span>
+                                </div>
+                                <div class="px-3 py-3">
+                                    <label class="visually-hidden" for="workspaceSearch">Search beneficiaries</label>
+                                    <input class="form-control" id="workspaceSearch" type="search" placeholder="Search beneficiary name, program, or reference" autocomplete="off" />
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Beneficiary</th>
+                                                <th>Program</th>
+                                                <th>Event / orientation</th>
+                                                <th>Attendance</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>Roberto Mendoza</strong><small>BEN-0302</small></td>
+                                                <td>Food assistance</td>
+                                                <td>Community assembly</td>
+                                                <td><span class="status status-approved">Present</span></td>
+                                                <td><span class="status status-approved">Approved</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Leticia Ramos</strong><small>BEN-0319</small></td>
+                                                <td>Medical assistance</td>
+                                                <td>Health assessment</td>
+                                                <td><span class="status status-pending">Pending</span></td>
+                                                <td><span class="status status-pending">Review</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Arnold Gomez</strong><small>BEN-0326</small></td>
+                                                <td>Emergency relief</td>
+                                                <td>Emergency validation</td>
+                                                <td><span class="status status-approved">Present</span></td>
+                                                <td><span class="status status-released">Released</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Delia Teodoro</strong><small>BEN-0334</small></td>
+                                                <td>Senior citizen support</td>
+                                                <td>Community orientation</td>
+                                                <td><span class="status status-rejected">Absent</span></td>
+                                                <td><span class="status status-pending">Follow-up</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+
+                            <aside class="program-event-panel">
+                                <div class="program-event-header">
+                                    <h3>Upcoming event</h3>
+                                    <span class="badge">Live</span>
+                                </div>
+                                <ul class="event-list">
+                                    <li>
+                                        <strong>Community assembly</strong>
+                                        <small>Wednesday, 8:30 AM</small>
+                                        <small>Barangay Hall</small>
+                                        <span class="event-pill">Public</span>
+                                    </li>
+                                    <li>
+                                        <strong>Health assessment</strong>
+                                        <small>Friday, 10:00 AM</small>
+                                        <small>Barangay clinic</small>
+                                        <span class="event-pill">Medical</span>
+                                    </li>
+                                    <li>
+                                        <strong>Emergency validation</strong>
+                                        <small>Saturday, 1:00 PM</small>
+                                        <small>Barangay covered court</small>
+                                        <span class="event-pill">Urgent</span>
+                                    </li>
+                                </ul>
+                            </aside>
+                        </div>
+
+                        <div class="program-content-grid">
+                            <section class="content-panel">
+                                <div class="panel-heading">
+                                    <div>
+                                        <p class="eyebrow">Attendance</p>
+                                        <h2>Mark beneficiary attendance</h2>
+                                        <span class="panel-hint">Search a registered beneficiary, then mark present or absent.</span>
+                                    </div>
+                                </div>
+                                <form class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="beneficiaryName">Search registered beneficiary</label>
+                                        <input class="form-control" id="beneficiaryName" type="search" placeholder="Type a name, then select the beneficiary" autocomplete="off" />
+                                        <div class="form-text">Type at least two letters, then click the matching name.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="beneficiaryEvent">Event / orientation</label>
+                                        <select class="form-select" id="beneficiaryEvent">
+                                            <option selected>Community assembly</option>
+                                            <option>Health assessment</option>
+                                            <option>Emergency validation</option>
+                                            <option>Senior citizen briefing</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="beneficiaryDate">Date</label>
+                                        <input class="form-control" id="beneficiaryDate" type="date" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="beneficiaryStatus">Status</label>
+                                        <select class="form-select" id="beneficiaryStatus">
+                                            <option>Present</option>
+                                            <option>Absent</option>
+                                            <option>Late</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="beneficiaryNotes">Notes</label>
+                                        <input class="form-control" id="beneficiaryNotes" type="text" placeholder="Optional" />
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button class="btn btn-primary" type="submit"><i class="fas fa-check me-1"></i> Save attendance</button>
+                                    </div>
+                                </form>
+                            </section>
+
+                            <section class="content-panel">
+                                <div class="panel-heading">
+                                    <div>
+                                        <p class="eyebrow">Event</p>
+                                        <h2>Create schedule</h2>
+                                    </div>
+                                </div>
+                                <form class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label" for="beneficiaryEventName">Event name</label>
+                                        <input class="form-control" id="beneficiaryEventName" type="text" placeholder="e.g. Community assembly" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="beneficiaryEventType">Type</label>
+                                        <select class="form-select" id="beneficiaryEventType">
+                                            <option>Orientation</option>
+                                            <option>Medical</option>
+                                            <option>Emergency</option>
+                                            <option>Assembly</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="beneficiarySchedule">Schedule</label>
+                                        <input class="form-control" id="beneficiarySchedule" type="date" />
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label" for="beneficiaryVenue">Venue</label>
+                                        <input class="form-control" id="beneficiaryVenue" type="text" placeholder="Barangay hall or clinic" />
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-calendar-plus me-1"></i> Save event</button>
+                                    </div>
+                                </form>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="py-4 bg-light mt-auto"><div class="container-fluid px-4"><div class="text-muted small">Copyright &copy; 2026 Barangay Program Management <span class="footer-separator">&middot;</span> Beneficiary records</div></div></footer>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
