@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        foreach (['student_applications', 'beneficiary_applications', 'livelihood_applications'] as $tableName) {
+        foreach (['beneficiary_applications', 'livelihood_applications'] as $tableName) {
             Schema::table($tableName, function (Blueprint $table): void {
                 $table->date('release_date')->nullable()->index();
                 $table->decimal('release_amount', 12, 2)->nullable();
@@ -18,7 +18,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        foreach (['student_applications', 'beneficiary_applications', 'livelihood_applications'] as $tableName) {
+        foreach (['beneficiary_applications', 'livelihood_applications'] as $tableName) {
             Schema::table($tableName, function (Blueprint $table): void {
                 $table->dropIndex(['release_date']);
                 $table->dropColumn(['release_date', 'release_amount']);

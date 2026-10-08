@@ -29,7 +29,6 @@ return new class extends Migration
             });
         };
 
-        $createApplicationTable('student_applications');
         $createApplicationTable('beneficiary_applications');
         $createApplicationTable('livelihood_applications', true);
 
@@ -47,17 +46,13 @@ return new class extends Migration
 
 
         DB::table('program_records')
-            ->whereIn('type', ['student', 'beneficiary', 'livelihood'])
+            ->whereIn('type', ['beneficiary', 'livelihood'])
             ->orderBy('id')
             ->chunkById(100, function ($records): void {
                 foreach ($records as $record) {
                     $data = is_array($record->data) ? $record->data : json_decode($record->data ?? '{}', true);
                     $data = is_array($data) ? $data : [];
-                    $table = match ($record->type) {
-                        'student' => 'student_applications',
-                        'beneficiary' => 'beneficiary_applications',
-                        default => 'livelihood_applications',
-                    };
+                    $table = $record->type === 'beneficiary' ? 'beneficiary_applications' : 'livelihood_applications';
                     $entry = [
                         'user_id' => $record->user_id,
                         'reference' => $record->reference,
@@ -78,12 +73,13 @@ return new class extends Migration
                 }
             });
 
-        DB::table('program_records')->whereIn('type', ['student', 'beneficiary', 'livelihood'])->delete();
+        DB::table('program_records')->whereIn('type', ['beneficiary', 'livelihood'])->delete();
+        DB::table('program_records')->where('type', 'student')->delete();
     }
 
     public function down(): void
     {
-        foreach (['student_applications' => 'student', 'beneficiary_applications' => 'beneficiary', 'livelihood_applications' => 'livelihood'] as $table => $type) {
+        foreach (['beneficiary_applications' => 'beneficiary', 'livelihood_applications' => 'livelihood'] as $table => $type) {
             if (! Schema::hasTable($table)) continue;
             foreach (DB::table($table)->orderBy('id')->get() as $record) {
                 $data = json_decode(Crypt::decryptString($record->data), true) ?: [];

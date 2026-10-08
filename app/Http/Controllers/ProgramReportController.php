@@ -42,7 +42,7 @@ class ProgramReportController extends Controller
             if (! empty($filters['to'])) $query->whereDate('submitted_at', '<=', $filters['to']);
             return $query;
         };
-        $pendingOverSevenDays = collect(['student_applications', 'beneficiary_applications'])
+        $pendingOverSevenDays = collect(['student_applications', 'beneficiary_applications', 'livelihood_applications'])
             ->sum(fn (string $table) => $pendingQuery($table)->count());
 
         $activityQuery = function (string $type) use ($filters) {

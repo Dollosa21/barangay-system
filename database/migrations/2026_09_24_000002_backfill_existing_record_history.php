@@ -8,7 +8,6 @@ return new class extends Migration
     public function up(): void
     {
         foreach ([
-            'student_applications' => 'student',
             'beneficiary_applications' => 'beneficiary',
             'livelihood_applications' => 'livelihood',
         ] as $table => $type) {

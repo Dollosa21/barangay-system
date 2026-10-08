@@ -4,18 +4,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Http\Controllers\ApplicationRecordController;
+use App\Http\Controllers\ProgramManagementController;
 use App\Http\Controllers\ProgramReportController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\ProgramQualificationRuleController;
 
-Route::get('/', function () {
-    return response()->file(public_path('login.html'));
-});
+Route::get('/', fn () => view('programs'))->name('home');
+Route::get('/index.php', fn () => view('programs'));
 
 Route::get('/admin', function () {
-    return response()->file(public_path('login.html'));
+    return redirect('/index.php');
 });
 
 Route::get('/auth/session', fn (Request $request) => response()->json([
@@ -27,7 +24,6 @@ Route::get('/auth/session', fn (Request $request) => response()->json([
 ]));
 Route::get('/auth/token', fn () => response()->json(['token' => csrf_token()]));
 Route::get('/auth/setup', fn () => response()->json(['canRegister' => ! User::query()->exists()]));
-
 Route::post('/auth/login', function (Request $request) {
     $credentials = $request->validate(['email' => 'required|email', 'password' => 'required|string']);
     $credentials['email'] = mb_strtolower(trim($credentials['email']));
@@ -89,18 +85,14 @@ Route::middleware(['auth', 'active'])->group(function () {
         $request->user()->update($validated);
         return response()->json(['name' => $request->user()->name, 'email' => $request->user()->email]);
     });
-    Route::get('/reports/history', [ApplicationRecordController::class, 'reportHistory']);
+    Route::get('/reports/history', [ProgramManagementController::class, 'reportHistory']);
     Route::get('/reports/summary', [ProgramReportController::class, 'summary']);
-    Route::get('/records', [ApplicationRecordController::class, 'index']);
-    Route::post('/records', [ApplicationRecordController::class, 'store'])->middleware('role:administrator');
-    Route::get('/records/{record}/history', [ApplicationRecordController::class, 'history']);
-    Route::patch('/records/{record}', [ApplicationRecordController::class, 'update'])->middleware('role:administrator');
+    Route::get('/records', [ProgramManagementController::class, 'index']);
+    Route::post('/records', [ProgramManagementController::class, 'store'])->middleware('role:administrator');
+    Route::get('/records/{record}/history', [ProgramManagementController::class, 'history']);
+    Route::patch('/records/{record}', [ProgramManagementController::class, 'update'])->middleware('role:administrator');
     Route::middleware('role:administrator')->group(function (): void {
         Route::get('/qualification-rules', [ProgramQualificationRuleController::class, 'index']);
         Route::put('/qualification-rules/{program}', [ProgramQualificationRuleController::class, 'update']);
-        Route::get('/notifications', [NotificationController::class, 'index']);
-        Route::post('/notifications/read', [NotificationController::class, 'markRead']);
-        Route::get('/admin/backup', [DatabaseBackupController::class, 'export']);
-        Route::post('/admin/restore', [DatabaseBackupController::class, 'restore']);
     });
 });
